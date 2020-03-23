@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public class Robot {
     public Navigation nav = new Navigation();
 
-    void init(HardwareMap hwMap) {
+    public void init(HardwareMap hwMap) {
         nav.init(hwMap);
     }
 }

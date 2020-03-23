@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "mechanum driving opmode", group = "ftc16072")
+@TeleOp(name = "mecanum driving opmode", group = "ftc16072")
 public class MecanumDrivingOpMode extends OpMode {
     private MecanumDrive mecanumDrive = new MecanumDrive();
     private double[] distances;
