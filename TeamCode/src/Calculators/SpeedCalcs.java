@@ -13,7 +13,7 @@ public class SpeedCalcs {
 
             @Override
             public double CalcSpeed(Interfaces.MoveData d){
-                return MathUtil.CompleteScaleAdjust(desiredSpeed, d.currentCommand.motionSpeed.x,d.currentCommand.motionSpeed.y);
+                return MathUtil.ScaleAdjustment(desiredSpeed, d.currentCommand.motionSpeed.x,d.currentCommand.motionSpeed.y,d.currentCommand.orientationSpeed);
             }
         };
     }

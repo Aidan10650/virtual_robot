@@ -11,7 +11,7 @@ public class MecanumDrivingComplexOpMode extends Op.ComplexOp {
 
     @Override
     public void body() throws InterruptedException {
-        ComplexMove(SpeedCalcs.topSpeed(0.75), MotionCalcs.moveWithFieldCentricJoystick(),
-                OrientationCalcs.turnWithJoystick(), OtherCalcs.whileOpMode());
+        ComplexMove(SpeedCalcs.topSpeed(1), MotionCalcs.moveWithFieldCentricJoystick(),
+                OrientationCalcs.turnWithJoystick(), OtherCalcs.TeleOpMatch());
     }
 }

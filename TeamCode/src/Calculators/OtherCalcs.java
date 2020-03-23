@@ -34,12 +34,13 @@ public class OtherCalcs {
                 if(d.firstLoop){
                   matchTime.startTimer(150000);
                   endGameTime.startTimer(120000);
+                  d.firstLoop=false;
                 }
 
                 d.timeRemainingUntilEndgame = endGameTime.timeRemaining();
                 d.timeRemainingUntilMatch = matchTime.timeRemaining();
+                d.progress = 1-(d.timeRemainingUntilMatch/150000);
 
-                d.progress = 0.5;
             }
         };
     }

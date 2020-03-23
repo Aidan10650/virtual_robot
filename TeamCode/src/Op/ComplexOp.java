@@ -57,16 +57,19 @@ public abstract class ComplexOp extends LinearOpMode{
 
 
             double distances[] = mecanumDrive.getDistanceCm();
-            telemetry.addData("time until endgame",d.timeRemainingUntilEndgame);
-            telemetry.addData("time until end of match",d.timeRemainingUntilMatch);
+            telemetry.addData("time until endgame",d.timeRemainingUntilEndgame/1000);
+            telemetry.addData("time until end of match",d.timeRemainingUntilMatch/1000);
             telemetry.addData("distance fwd", distances[0]);
             telemetry.addData("distance right", distances[1]);
             telemetry.addData("orientation", d.currentCommand.orientationSpeed);
             telemetry.addData("motiony", d.currentCommand.motionSpeed.y);
             telemetry.addData("motionx", d.currentCommand.motionSpeed.x);
+            telemetry.addData("speed",d.currentCommand.speed);
             telemetry.update();
 
-            mecanumDrive.driveMecanum(d.currentCommand.motionSpeed.y,d.currentCommand.motionSpeed.x,d.currentCommand.orientationSpeed);
+            mecanumDrive.driveMecanum(d.currentCommand.motionSpeed.y*d.currentCommand.speed,
+                    d.currentCommand.motionSpeed.x*d.currentCommand.speed,
+                    d.currentCommand.orientationSpeed*d.currentCommand.speed);
 //            d.frightPow = +d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y + d.currentCommand.orientationSpeed;
 //            d.brightPow = -d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y + d.currentCommand.orientationSpeed;
 //            d.bleftPow = +d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y - d.currentCommand.orientationSpeed;
