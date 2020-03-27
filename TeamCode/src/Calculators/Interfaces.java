@@ -7,6 +7,8 @@ import Utilities.MathUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.ftc16072.Navigation;
 
+import java.util.ArrayList;
+
 public class Interfaces {
 
 
@@ -31,6 +33,17 @@ public class Interfaces {
         public DcMotor bright, fright, bleft, fleft;
         public Command currentCommand = null;
         public Command lastCommand = null;
+        public double wX;//current robot world position
+        public double wY;
+        public Utilities.VectorUtil encoderPos = new Utilities.VectorUtil();
+        public double[] eX = {0,0,0,0,0,0,0,0,0,0,0};
+        public double[] eY = {0,0,0,0,0,0,0,0,0,0,0};
+        public double[] preX = {0,0,0,0,0,0,0,0,0,0,0};
+        public double[] preY = {0,0,0,0,0,0,0,0,0,0,0};
+        public double[][] line = {{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},};
+        public int lineNum = 0;
+        public boolean forFirstLoop = true;
+        public boolean testFirstLoop = true;
         public double progress;
 
     }

@@ -34,9 +34,18 @@ public abstract class ComplexOp extends LinearOpMode{
 
         while(d.progress <= 1) {
             d.heading = robot.nav.getHeading(AngleUnit.DEGREES);
-            d.currentCommand.speed = speedCalc.CalcSpeed(d);
-            d.currentCommand.motionSpeed = motionCalc.CalcMotion(d);
+            double encoderPreY = d.encoderPos.y;
+            double encoderPreX = d.encoderPos.x;
+            d.encoderPos.y = mecanumDrive.getDistanceCm()[0];
+            d.encoderPos.x = mecanumDrive.getDistanceCm()[1];
+            Utilities.VectorUtil deltaMove = new Utilities.VectorUtil(d.encoderPos.x-encoderPreX,d.encoderPos.y-encoderPreY);
+            deltaMove.rotateBy(Math.toRadians(d.heading));
+            d.wX += deltaMove.x;
+            d.wY += deltaMove.y;
             d.currentCommand.orientationSpeed = orientationCalc.CalcOrientation(d);
+            d.currentCommand.motionSpeed = motionCalc.CalcMotion(d);
+            d.currentCommand.speed = speedCalc.CalcSpeed(d);
+
             for (Interfaces.OtherCalc calc : otherCalc) {
                 calc.CalcOther(d);
             }
@@ -59,8 +68,11 @@ public abstract class ComplexOp extends LinearOpMode{
             double distances[] = mecanumDrive.getDistanceCm();
             telemetry.addData("time until endgame",d.timeRemainingUntilEndgame/1000);
             telemetry.addData("time until end of match",d.timeRemainingUntilMatch/1000);
-            telemetry.addData("distance fwd", distances[0]);
-            telemetry.addData("distance right", distances[1]);
+  //          telemetry.addData("distance fwd", distances[0]);
+            telemetry.addData("my distance fwd", d.wY);
+//            telemetry.addData("distance right", distances[1]);
+            telemetry.addData("my distance side", d.wX);
+            telemetry.addData("heading", d.heading);
             telemetry.addData("orientation", d.currentCommand.orientationSpeed);
             telemetry.addData("motiony", d.currentCommand.motionSpeed.y);
             telemetry.addData("motionx", d.currentCommand.motionSpeed.x);
@@ -69,7 +81,7 @@ public abstract class ComplexOp extends LinearOpMode{
 
             mecanumDrive.driveMecanum(d.currentCommand.motionSpeed.y*d.currentCommand.speed,
                     d.currentCommand.motionSpeed.x*d.currentCommand.speed,
-                    d.currentCommand.orientationSpeed*d.currentCommand.speed);
+                    d.currentCommand.orientationSpeed);
 //            d.frightPow = +d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y + d.currentCommand.orientationSpeed;
 //            d.brightPow = -d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y + d.currentCommand.orientationSpeed;
 //            d.bleftPow = +d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y - d.currentCommand.orientationSpeed;

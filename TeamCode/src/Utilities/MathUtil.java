@@ -29,6 +29,10 @@ public class MathUtil {
             x = X;
             y = Y;
         }
+        public Vector(VectorUtil v){
+            x = v.x;
+            y = v.y;
+        }
         public Vector(){
             x = 0;
             y = 0;

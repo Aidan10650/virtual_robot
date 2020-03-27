@@ -4,23 +4,21 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class TimeUtil {
 
-    private static long startTime;
-    private static int millis;
+    private long startTime;
+    private int millis;
 
-    public TimeUtil() {
+    public TimeUtil() { }
 
-    }
-
-    public static void startTimer(int millis) {
-        TimeUtil.millis = millis;
+    public void startTimer(int millis) {
         startTime = System.currentTimeMillis();
+        this.millis = millis;
     }
 
-    public static double timeRemaining(){
+    public double timeRemaining(){
        return millis-(System.currentTimeMillis() - startTime);
     }
 
-    public static void sleep(long millis) throws InterruptedException{
+    public void sleep(long millis) throws InterruptedException{
         try {
             Thread.sleep(millis);
         } catch (Error e) {
