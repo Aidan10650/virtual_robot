@@ -1,5 +1,6 @@
 package Op;
 
+import Utilities.VectorUtil;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import Calculators.Interfaces;
@@ -12,11 +13,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.ftc16072.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc16072.Robot;
 
+import static Utilities.MathUtil.Rotate2D;
+
 public abstract class ComplexOp extends LinearOpMode{
 
     private MecanumDrive mecanumDrive = new MecanumDrive();
     private Robot robot = new Robot();
 
+    float endGameTime = 0;
 
     public void ComplexMove(Interfaces.SpeedCalc speedCalc,
                             Interfaces.MotionCalc motionCalc,
@@ -44,6 +48,10 @@ public abstract class ComplexOp extends LinearOpMode{
             d.wY += deltaMove.y;
             d.currentCommand.orientationSpeed = orientationCalc.CalcOrientation(d);
             d.currentCommand.motionSpeed = motionCalc.CalcMotion(d);
+            Utilities.VectorUtil motion = new Utilities.VectorUtil(d.currentCommand.motionSpeed.x, d.currentCommand.motionSpeed.y);
+            motion.rotateBy(Math.toRadians(-d.heading));
+            d.currentCommand.motionSpeed.x = motion.x;
+            d.currentCommand.motionSpeed.y = motion.y;
             d.currentCommand.speed = speedCalc.CalcSpeed(d);
 
             for (Interfaces.OtherCalc calc : otherCalc) {
@@ -60,23 +68,21 @@ public abstract class ComplexOp extends LinearOpMode{
                     motionCalc.doProgress(d) ||
                     orientationCalc.doProgress(d);
 
-//            d.currentCommand.motionSpeed.x *= d.currentCommand.speed;
-//            d.currentCommand.motionSpeed.y *= d.currentCommand.speed;
-//            d.currentCommand.orientationSpeed *= d.currentCommand.speed;
-
-
             double distances[] = mecanumDrive.getDistanceCm();
-            telemetry.addData("time until endgame",d.timeRemainingUntilEndgame/1000);
-            telemetry.addData("time until end of match",d.timeRemainingUntilMatch/1000);
-  //          telemetry.addData("distance fwd", distances[0]);
-            telemetry.addData("my distance fwd", d.wY);
+            if (d.timeRemainingUntilEndgame >= 0) endGameTime = (float)(Math.round(d.timeRemainingUntilEndgame / 100) / 10.0);
+
+            telemetry.addData("Progress", Math.round(d.progress*1000)/10.0);
+            telemetry.addData("time until endgame", endGameTime);
+            telemetry.addData("time until end of match",Math.round(d.timeRemainingUntilMatch/100)/10.0);
+//            telemetry.addData("distance fwd", distances[0]);
+            telemetry.addData("my distance fwd", Math.round(d.wY*10)/10.0);
 //            telemetry.addData("distance right", distances[1]);
-            telemetry.addData("my distance side", d.wX);
-            telemetry.addData("heading", d.heading);
-            telemetry.addData("orientation", d.currentCommand.orientationSpeed);
-            telemetry.addData("motiony", d.currentCommand.motionSpeed.y);
-            telemetry.addData("motionx", d.currentCommand.motionSpeed.x);
-            telemetry.addData("speed",d.currentCommand.speed);
+            telemetry.addData("my distance side", Math.round(d.wX*10)/10.0);
+            telemetry.addData("heading", Math.round(d.heading*10)/10.0);
+            telemetry.addData("orientation", Math.round(d.currentCommand.orientationSpeed*10)/10.0);
+            telemetry.addData("motiony", Math.round(d.currentCommand.motionSpeed.y*10)/10.0);
+            telemetry.addData("motionx", Math.round(d.currentCommand.motionSpeed.x*10)/10.0);
+            telemetry.addData("speed",Math.round(d.currentCommand.speed*10)/10.0);
             telemetry.update();
 
             mecanumDrive.driveMecanum(d.currentCommand.motionSpeed.y*d.currentCommand.speed,

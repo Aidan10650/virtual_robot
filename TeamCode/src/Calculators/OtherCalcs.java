@@ -18,6 +18,20 @@ public class OtherCalcs {
             }
         };
     }
+
+    public static Interfaces.OtherCalc nothing(){
+
+        return new Interfaces.OtherCalc(){
+            @Override
+            public boolean doProgress(Interfaces.MoveData d) {
+                return false;
+            }
+
+            @Override
+            public void CalcOther(Interfaces.MoveData d){ }
+        };
+    }
+
     public static Interfaces.OtherCalc TeleOpMatch(){
 
         Utilities.TimeUtil matchTime = new Utilities.TimeUtil();

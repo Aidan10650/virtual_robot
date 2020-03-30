@@ -35,15 +35,23 @@ public class Interfaces {
         public Command lastCommand = null;
         public double wX;//current robot world position
         public double wY;
+        public double preWX = 0;
+        public double preWY = 0;
         public Utilities.VectorUtil encoderPos = new Utilities.VectorUtil();
-        public double[] eX = {0,0,0,0,0,0,0,0,0,0,0};
-        public double[] eY = {0,0,0,0,0,0,0,0,0,0,0};
-        public double[] preX = {0,0,0,0,0,0,0,0,0,0,0};
-        public double[] preY = {0,0,0,0,0,0,0,0,0,0,0};
-        public double[][] line = {{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},};
+        public double[] eX = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        public double[] eY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        public double[] preX = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        public double[] preY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        public double[][] line = {{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}};
         public int lineNum = 0;
+        public double totalDist = 0;
+        public double worldDist = 0;
+        public int currentSpin = 0;
+        public boolean foundSpin = false;
         public boolean forFirstLoop = true;
         public boolean testFirstLoop = true;
+        public double orientationError = 0;
+        public double orientationP = 0.5;
         public double progress;
 
     }
