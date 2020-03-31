@@ -1,26 +1,21 @@
 package Op;
 
-import Utilities.VectorUtil;
+import Utilities.Vector2D;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import Calculators.Interfaces;
-import Calculators.OrientationCalcs;
-import Control.TeleControl.CompleteController;
-import Utilities.MathUtil;
+import Hardware.CompleteController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.ftc16072.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc16072.Robot;
 
-import static Utilities.MathUtil.Rotate2D;
-
 public abstract class ComplexOp extends LinearOpMode{
 
     private MecanumDrive mecanumDrive = new MecanumDrive();
     private Robot robot = new Robot();
 
-    float endGameTime = 0;
 
     public void ComplexMove(Interfaces.SpeedCalc speedCalc,
                             Interfaces.MotionCalc motionCalc,
@@ -30,25 +25,26 @@ public abstract class ComplexOp extends LinearOpMode{
 
         mecanumDrive.init(hardwareMap);
 
+        float endGameTime = 0;
         d.progress = 0;
-        MathUtil.Vector vector = new MathUtil.Vector();
+        Vector2D vector = new Vector2D();
         d.lastCommand = d.currentCommand;
         d.currentCommand = new Interfaces.MoveData.Command(0, vector,0.0);
 
 
-        while(d.progress <= 1) {
+        while(d.progress < 1.0) {
             d.heading = robot.nav.getHeading(AngleUnit.DEGREES);
             double encoderPreY = d.encoderPos.y;
             double encoderPreX = d.encoderPos.x;
             d.encoderPos.y = mecanumDrive.getDistanceCm()[0];
             d.encoderPos.x = mecanumDrive.getDistanceCm()[1];
-            Utilities.VectorUtil deltaMove = new Utilities.VectorUtil(d.encoderPos.x-encoderPreX,d.encoderPos.y-encoderPreY);
+            Vector2D deltaMove = new Vector2D(d.encoderPos.x-encoderPreX,d.encoderPos.y-encoderPreY);
             deltaMove.rotateBy(Math.toRadians(d.heading));
-            d.wX += deltaMove.x;
-            d.wY += deltaMove.y;
+            d.wPos.x += deltaMove.x;
+            d.wPos.y += deltaMove.y;
             d.currentCommand.orientationSpeed = orientationCalc.CalcOrientation(d);
             d.currentCommand.motionSpeed = motionCalc.CalcMotion(d);
-            Utilities.VectorUtil motion = new Utilities.VectorUtil(d.currentCommand.motionSpeed.x, d.currentCommand.motionSpeed.y);
+            Vector2D motion = new Vector2D(d.currentCommand.motionSpeed.x, d.currentCommand.motionSpeed.y);
             motion.rotateBy(Math.toRadians(-d.heading));
             d.currentCommand.motionSpeed.x = motion.x;
             d.currentCommand.motionSpeed.y = motion.y;
@@ -68,16 +64,15 @@ public abstract class ComplexOp extends LinearOpMode{
                     motionCalc.doProgress(d) ||
                     orientationCalc.doProgress(d);
 
-            double distances[] = mecanumDrive.getDistanceCm();
             if (d.timeRemainingUntilEndgame >= 0) endGameTime = (float)(Math.round(d.timeRemainingUntilEndgame / 100) / 10.0);
 
+            //could add specific telemetry data to show through an implementation of complexOp
+            telemetry.addData("Progress found", didProgress);
             telemetry.addData("Progress", Math.round(d.progress*1000)/10.0);
             telemetry.addData("time until endgame", endGameTime);
             telemetry.addData("time until end of match",Math.round(d.timeRemainingUntilMatch/100)/10.0);
-//            telemetry.addData("distance fwd", distances[0]);
-            telemetry.addData("my distance fwd", Math.round(d.wY*10)/10.0);
-//            telemetry.addData("distance right", distances[1]);
-            telemetry.addData("my distance side", Math.round(d.wX*10)/10.0);
+            telemetry.addData("my distance fwd", Math.round(d.wPos.y*10)/10.0);
+            telemetry.addData("my distance side", Math.round(d.wPos.x*10)/10.0);
             telemetry.addData("heading", Math.round(d.heading*10)/10.0);
             telemetry.addData("orientation", Math.round(d.currentCommand.orientationSpeed*10)/10.0);
             telemetry.addData("motiony", Math.round(d.currentCommand.motionSpeed.y*10)/10.0);
@@ -85,20 +80,9 @@ public abstract class ComplexOp extends LinearOpMode{
             telemetry.addData("speed",Math.round(d.currentCommand.speed*10)/10.0);
             telemetry.update();
 
-            mecanumDrive.driveMecanum(d.currentCommand.motionSpeed.y*d.currentCommand.speed,
+            mecanumDrive.driveMecanum(d.currentCommand.motionSpeed.y*d.currentCommand.speed, //I could make one that takes a vector as an arg //that would be cleaner// and my code
                     d.currentCommand.motionSpeed.x*d.currentCommand.speed,
                     d.currentCommand.orientationSpeed);
-//            d.frightPow = +d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y + d.currentCommand.orientationSpeed;
-//            d.brightPow = -d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y + d.currentCommand.orientationSpeed;
-//            d.bleftPow = +d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y - d.currentCommand.orientationSpeed;
-//            d.fleftPow = -d.currentCommand.motionSpeed.x + d.currentCommand.motionSpeed.y - d.currentCommand.orientationSpeed;
-//
-//            double adjust = MathUtil.ScaleAdjustment(1,d.frightPow,d.brightPow,d.bleftPow,d.fleftPow);
-//
-//            d.bright.setPower(adjust*d.brightPow);
-//            d.fright.setPower(adjust*d.frightPow);
-//            d.bleft.setPower(adjust*d.bleftPow);
-//            d.fleft.setPower(adjust*d.fleftPow);
 
             if (!opModeIsActive()) {
                 throw new InterruptedException();
@@ -106,12 +90,13 @@ public abstract class ComplexOp extends LinearOpMode{
         }
     }
 
-    private Interfaces.MoveData d = new Interfaces.MoveData();
+    //How data is transferred between calculators and complexOp
+    private Interfaces.MoveData d = new Interfaces.MoveData();//if you delete this the world will end
 
-    void init(HardwareMap hwMap) {
+    void initHardware(HardwareMap hwMap) {
         robot.init(hwMap);
         d.fleft = hwMap.get(DcMotor.class, "front_left_motor");
-        d.fleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        d.fleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//I'm not really sure what this does //My guess is that it resets the encoders
         d.fright = hwMap.get(DcMotor.class, "front_right_motor");
         d.fright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         d.bleft = hwMap.get(DcMotor.class, "back_left_motor");
@@ -123,20 +108,10 @@ public abstract class ComplexOp extends LinearOpMode{
         d.fleft.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    public void initHardware() {
-
-//        RobotMap map = new RobotMap(hardwareMap);
-//
-//        d.bright = map.bright;
-//        d.fright = map.fright;
-//        d.bleft = map.bleft;
-//        d.fleft = map.fleft;
-    }
-
     public abstract void body() throws InterruptedException;
 
-    public void exit(){
-        d.bright.setPower(0);
+    public void exit(){//so we don't run into a wall at full speed
+        d.bright.setPower(0);//this has multiple meanings lol
         d.fright.setPower(0);
         d.bleft.setPower(0);
         d.fleft.setPower(0);
@@ -160,9 +135,7 @@ public abstract class ComplexOp extends LinearOpMode{
         d.driver.CompleteController(gamepad1);
         d.manip.CompleteController(gamepad2);
 
-        init(hardwareMap);
-
-        initHardware();
+        initHardware(hardwareMap);
 
         telemetry.addData("Initializing", "Finished");
         telemetry.update();
@@ -171,20 +144,24 @@ public abstract class ComplexOp extends LinearOpMode{
 
         d.isStarted = true;
 
-        telemetry.addData("First Loop", "Finished");
+        telemetry.addData("Body", "Started");
         telemetry.update();
-
-
         //BODY
-
         try {
             body();
-        } catch (InterruptedException ie) { }
+        } catch (InterruptedException ie) {
+            telemetry.addData("Interrupted","Exception");
+            telemetry.update();
+        }
+        telemetry.addData("Body", "Finished");
+        telemetry.update();
 
         //EXIT
         telemetry.addData("Exit", "Started");
         telemetry.update();
         exit();
         d.isFinished = true;
+        telemetry.addData("Exit", "Finished");
+        telemetry.update();
     }
 }

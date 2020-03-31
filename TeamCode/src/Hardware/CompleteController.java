@@ -1,4 +1,4 @@
-package Control.TeleControl;
+package Hardware;
 
 /**
  * Created by Varun on 11/16/2017.
@@ -6,6 +6,7 @@ package Control.TeleControl;
  */
 
 
+import Utilities.Vector2D;
 import com.qualcomm.robotcore.hardware.GamePad;
 
 import Utilities.MathUtil;
@@ -80,11 +81,11 @@ public class CompleteController {
     }
 
 
-    public MathUtil.Vector getLeftStick(){
+    public Vector2D getLeftStick(){
         return GetControllerJoystick(gamepad.left_stick_x,gamepad.left_stick_y,leftStick);
     }
 
-    public MathUtil.Vector getRightStick(){
+    public Vector2D getRightStick(){
         return GetControllerJoystick(gamepad.right_stick_x,gamepad.right_stick_y,leftStick);
     }
 
@@ -149,8 +150,8 @@ public class CompleteController {
         return gamepad.y;
     }
 
-    private MathUtil.Vector GetControllerJoystick (double X, double Y, StickConfig s){
-        MathUtil.Vector XY = new MathUtil.Vector();
+    private Vector2D GetControllerJoystick (double X, double Y, StickConfig s){
+        Vector2D XY = new Vector2D();
         boolean OutsideJoystickDeadzone = false;
         double JDM = s.JoystickDeadzoneMag;
         if(s.reverseX) X=-X;

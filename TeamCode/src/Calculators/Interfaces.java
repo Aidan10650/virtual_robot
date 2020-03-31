@@ -1,13 +1,9 @@
 package Calculators;
 
+import Utilities.Vector2D;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import Control.TeleControl.CompleteController;
-import Utilities.MathUtil;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.ftc16072.Navigation;
-
-import java.util.ArrayList;
+import Hardware.CompleteController;
 
 public class Interfaces {
 
@@ -16,9 +12,9 @@ public class Interfaces {
     public static class MoveData{
         public static class Command{
             public double speed;
-            public MathUtil.Vector motionSpeed;
+            public Vector2D motionSpeed;
             public double orientationSpeed;
-            public Command(double speed, MathUtil.Vector motionSpeed, double orientationSpeed){
+            public Command(double speed, Vector2D motionSpeed, double orientationSpeed){
                 this.speed = speed;
                 this.motionSpeed = motionSpeed;
                 this.orientationSpeed = orientationSpeed;
@@ -33,23 +29,10 @@ public class Interfaces {
         public DcMotor bright, fright, bleft, fleft;
         public Command currentCommand = null;
         public Command lastCommand = null;
-        public double wX;//current robot world position
-        public double wY;
-        public double preWX = 0;
-        public double preWY = 0;
-        public Utilities.VectorUtil encoderPos = new Utilities.VectorUtil();
-        public double[] eX = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        public double[] eY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        public double[] preX = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        public double[] preY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        public double[][] line = {{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}};
-        public int lineNum = 0;
-        public double totalDist = 0;
-        public double worldDist = 0;
+        public Vector2D wPos = new Vector2D(0,0);//current robot world position
+        public Vector2D encoderPos = new Vector2D();
         public int currentSpin = 0;
         public boolean foundSpin = false;
-        public boolean forFirstLoop = true;
-        public boolean testFirstLoop = true;
         public double orientationError = 0;
         public double orientationP = 0.5;
         public double progress;
@@ -62,7 +45,7 @@ public class Interfaces {
 
 
     public interface MotionCalc extends ProgressCalc{
-        MathUtil.Vector CalcMotion(MoveData d);
+        Vector2D CalcMotion(MoveData d);
     }
 
     public interface OrientationCalc extends ProgressCalc{

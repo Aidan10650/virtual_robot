@@ -7,39 +7,6 @@ public class MathUtil {
         NEGATIVE
     }
 
-
-    public static class Point{
-        public double x;
-        public double y;
-        public Point(double X, double Y){
-            x = X;
-            y = Y;
-        }
-        public Point(){
-            x = 0;
-            y = 0;
-        }
-
-    }
-
-    public static class Vector{
-        public double x;
-        public double y;
-        public Vector(double X, double Y){
-            x = X;
-            y = Y;
-        }
-        public Vector(VectorUtil v){
-            x = v.x;
-            y = v.y;
-        }
-        public Vector(){
-            x = 0;
-            y = 0;
-        }
-
-    }
-
     public static double getSign (double val){
         return val/Math.abs(val);
     }
@@ -77,20 +44,6 @@ public class MathUtil {
 
     public static double Distance(double X1, double Y1, double X2, double Y2){
         return Math.sqrt(Math.pow(X1-X2,2)+Math.pow(Y1-Y2,2));
-    }
-
-    public static MathUtil.Point Rotate2D(MathUtil.Point point, float angle){
-        double angleRad = Math.toRadians(angle);
-        double cos = Math.cos(angleRad);
-        double sin = Math.sin(angleRad);
-        return new MathUtil.Point(point.x * cos - point.y * sin,point.x * sin + point.y * cos);
-    }
-
-    public static MathUtil.Vector Rotate2D(MathUtil.Vector point, float angle){
-        double angleRad = Math.toRadians(angle);
-        double cos = Math.cos(angleRad);
-        double sin = Math.sin(angleRad);
-        return new MathUtil.Vector(point.x * cos - point.y * sin,point.x * sin + point.y * cos);
     }
 
     public static double[] quadSolve(double coefficientA, double coefficientB, double coefficientC){
