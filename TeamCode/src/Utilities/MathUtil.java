@@ -113,11 +113,23 @@ public class MathUtil {
         return y;
     }
 
-    public static double findMax(double... inputs){
+    public static double findMaxList(double... inputs){
         double largestValue = 0;
-        for(int i = 0; i <= inputs.length; i++){
+        for(int i = 0; i < inputs.length; i++){
             largestValue = Math.max(Math.abs(inputs[i]),largestValue);
         }
         return largestValue;
+    }
+
+    public static double findMaxArray(double[] inputs){
+        double largestValue = 0;
+        for(int i = 0; i < inputs.length; i++){
+            largestValue = Math.max(Math.abs(inputs[i]),largestValue);
+        }
+        return largestValue;
+    }
+
+    public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 }

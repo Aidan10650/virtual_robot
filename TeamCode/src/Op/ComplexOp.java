@@ -1,13 +1,16 @@
 package Op;
 
+import Utilities.MathUtil;
 import Utilities.Vector2D;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import Calculators.Interfaces;
 import Hardware.CompleteController;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc16072.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc16072.Robot;
 
@@ -50,24 +53,24 @@ public abstract class ComplexOp extends LinearOpMode{
             d.currentCommand.motionSpeed.y = motion.y;
             d.currentCommand.speed = speedCalc.CalcSpeed(d);
 
-            for (Interfaces.OtherCalc calc : otherCalc) {
-                calc.CalcOther(d);
-            }
-            boolean didOtherProgress = false;
-            for (Interfaces.OtherCalc calc : otherCalc) {
-                didOtherProgress = calc.doProgress(d);
-                if (didOtherProgress) break;
-            }
-            boolean didProgress =
-                    didOtherProgress ||
-                    speedCalc.doProgress(d) ||
-                    motionCalc.doProgress(d) ||
-                    orientationCalc.doProgress(d);
+            for (Interfaces.OtherCalc calc : otherCalc) calc.CalcOther(d);
+
+//            boolean didOtherProgress = false;
+//            for (Interfaces.OtherCalc calc : otherCalc) {
+//                didOtherProgress = calc.doProgress(d);
+//                if (didOtherProgress) break;
+//            }
+//            boolean didProgress =
+//                    didOtherProgress ||
+//                    speedCalc.doProgress(d) ||
+//                    motionCalc.doProgress(d) ||
+//                    orientationCalc.doProgress(d);
 
             if (d.timeRemainingUntilEndgame >= 0) endGameTime = (float)(Math.round(d.timeRemainingUntilEndgame / 100) / 10.0);
 
             //could add specific telemetry data to show through an implementation of complexOp
-            telemetry.addData("Progress found", didProgress);
+//          telemetry.addData("Progress found", didProgress);
+            telemetry.addData("frontDist",Math.round(d.frontDist.getDistance(DistanceUnit.CM)*10)/10.0);
             telemetry.addData("Progress", Math.round(d.progress*1000)/10.0);
             telemetry.addData("time until endgame", endGameTime);
             telemetry.addData("time until end of match",Math.round(d.timeRemainingUntilMatch/100)/10.0);
@@ -83,6 +86,15 @@ public abstract class ComplexOp extends LinearOpMode{
             mecanumDrive.driveMecanum(d.currentCommand.motionSpeed.y*d.currentCommand.speed, //I could make one that takes a vector as an arg //that would be cleaner// and my code
                     d.currentCommand.motionSpeed.x*d.currentCommand.speed,
                     d.currentCommand.orientationSpeed);
+
+
+            d.progress = MathUtil.findMaxList(motionCalc.myProgress(d),orientationCalc.myProgress(d),
+                                          speedCalc.myProgress(d));
+
+            for (Interfaces.OtherCalc calc : otherCalc) {
+                d.progress = Math.max(d.progress,calc.myProgress(d));
+            }
+
 
             if (!opModeIsActive()) {
                 throw new InterruptedException();
@@ -106,15 +118,17 @@ public abstract class ComplexOp extends LinearOpMode{
 
         d.bleft.setDirection(DcMotor.Direction.REVERSE);
         d.fleft.setDirection(DcMotor.Direction.REVERSE);
+
+        d.frontDist = hwMap.get(DistanceSensor.class, "front_distance");
     }
 
     public abstract void body() throws InterruptedException;
 
     public void exit(){//so we don't run into a wall at full speed
-        d.bright.setPower(0);//this has multiple meanings lol
-        d.fright.setPower(0);
-        d.bleft.setPower(0);
-        d.fleft.setPower(0);
+        d.bright.setPower(-1);//this has multiple meanings lol
+        d.fright.setPower(-1);
+        d.bleft.setPower(-1);
+        d.fleft.setPower(-1);
     }
 
 

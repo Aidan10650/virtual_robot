@@ -14,19 +14,27 @@ public class TimeUtil {
         this.millis = millis;
     }
 
+    public void resetTimer() {
+        startTime = System.currentTimeMillis();
+    }
+
     public double timeRemaining(){
        return millis-(System.currentTimeMillis() - startTime);
     }
 
-    public void sleep(long millis) throws InterruptedException{
-        try {
-            Thread.sleep(millis);
-        } catch (Error e) {
-            e.printStackTrace();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+    public double timePassed(){
+        return System.currentTimeMillis()-startTime;
     }
+
+//    public void sleep(long millis) throws InterruptedException{
+//        try {
+//            Thread.sleep(millis);
+//        } catch (Error e) {
+//            e.printStackTrace();
+//        } catch (Exception ex){
+//            ex.printStackTrace();
+//        }
+//    }
 
     public boolean timerDone() {
         return startTime + millis < System.currentTimeMillis();

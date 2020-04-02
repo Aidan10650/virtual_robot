@@ -20,8 +20,8 @@ public class MotionCalcs { //This will always output a power on the x axis of th
             }
 
             @Override
-            public boolean doProgress(Interfaces.MoveData d) {
-                return false;
+            public double myProgress(Interfaces.MoveData d) {
+                return 0;
             }
         };
     }
@@ -29,8 +29,8 @@ public class MotionCalcs { //This will always output a power on the x axis of th
     public static Interfaces.MotionCalc moveWithObjectCentricJoystick(){
         return new Interfaces.MotionCalc() {
             @Override
-            public boolean doProgress(Interfaces.MoveData d) {
-                return false;
+            public double myProgress(Interfaces.MoveData d) {
+                return 0;
             }
 
             @Override
@@ -44,21 +44,18 @@ public class MotionCalcs { //This will always output a power on the x axis of th
 
         return new Interfaces.MotionCalc() {
 
+            private double myProgress = 0;
             private boolean firstLoop = true;
             private double totalDist = 0;
             private double worldDist = 0;
             private ArrayList<Vector2D> ePosArray = new ArrayList<Vector2D>();
             private ArrayList<Vector2D> preEPosArray = new ArrayList<Vector2D>();
-//            private double[] eX = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//I might fix this at some point, but you cannot create
-//            private double[] eY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};// a new value on an array so I am not making a new value
-//            private double[] preX = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};// I am editing a zero
-//            private double[] preY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};// Could use an ArrayList but this does the same thing and ArrayLists are painful
             private int lineNum = 0;
             private Vector2D preWPos = new Vector2D(0,0);
 
             @Override
-            public boolean doProgress(Interfaces.MoveData d) {
-                return true;
+            public double myProgress(Interfaces.MoveData d) {
+                return myProgress;
             }
 
             @Override
@@ -100,7 +97,7 @@ public class MotionCalcs { //This will always output a power on the x axis of th
                 worldDist += d.wPos.distance(preWPos);
 
                 //Making a ratio of how much we have traveled over what we should travel to create progress
-                d.progress = worldDist/totalDist;
+                myProgress = worldDist/totalDist;
 
                 //setting this for the next loop
                 preWPos.set(d.wPos);

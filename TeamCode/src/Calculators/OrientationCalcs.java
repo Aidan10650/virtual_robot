@@ -6,8 +6,8 @@ public class OrientationCalcs {
 
         return new Interfaces.OrientationCalc(){
             @Override
-            public boolean doProgress(Interfaces.MoveData d) {
-                return false;
+            public double myProgress(Interfaces.MoveData d) {
+                return 0;
             }
 
             @Override
@@ -21,8 +21,8 @@ public class OrientationCalcs {
 
         return new Interfaces.OrientationCalc(){
             @Override
-            public boolean doProgress(Interfaces.MoveData d) {
-                return false;
+            public double myProgress(Interfaces.MoveData d) {
+                return 0;
             }
 
             @Override
@@ -35,8 +35,8 @@ public class OrientationCalcs {
 
         return new Interfaces.OrientationCalc(){
             @Override
-            public boolean doProgress(Interfaces.MoveData d) {
-                return false;
+            public double myProgress(Interfaces.MoveData d) {
+                return 0;
             }
 
             @Override
@@ -50,8 +50,8 @@ public class OrientationCalcs {
 
         return new Interfaces.OrientationCalc(){
             @Override
-            public boolean doProgress(Interfaces.MoveData d) {
-                return false;
+            public double myProgress(Interfaces.MoveData d) {
+                return 0;
             }
 
             @Override
@@ -79,6 +79,14 @@ public class OrientationCalcs {
             }
         };
     }
+
+    /**
+     *
+     *
+     * Make a calc that points the heading to a specific point
+     *
+     */
+
     public static class spinProgress{
         double startSpinProgress;
         double endSpinProgress;

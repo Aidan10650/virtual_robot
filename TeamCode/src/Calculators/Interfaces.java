@@ -4,10 +4,9 @@ import Utilities.Vector2D;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import Hardware.CompleteController;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 public class Interfaces {
-
-
 
     public static class MoveData{
         public static class Command{
@@ -20,7 +19,9 @@ public class Interfaces {
                 this.orientationSpeed = orientationSpeed;
             }
         }
+
         public double heading = 0;
+        public DistanceSensor frontDist;
         public boolean firstLoop = true;
         public double timeRemainingUntilEndgame = 0;
         public double timeRemainingUntilMatch = 0;
@@ -35,12 +36,17 @@ public class Interfaces {
         public boolean foundSpin = false;
         public double orientationError = 0;
         public double orientationP = 0.5;
+        public double motionProgress = 0;
+        public double orientationProgress = 0;
+        public double speedProgress = 0;
+        public double otherProgress = 0;
+        public double previousSpeed = 0;
         public double progress;
 
     }
 
     public interface ProgressCalc{
-        boolean doProgress(MoveData d);
+        double myProgress(MoveData d);
     }
 
 
