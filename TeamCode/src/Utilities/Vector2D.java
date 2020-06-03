@@ -77,6 +77,17 @@ public class Vector2D {
         y /= magnitude;
     }
 
+    public static double angleDifferenceDeg(Vector2D vector1, Vector2D vector2){
+        double rVal = Math.toDegrees(vector1.getAngle() - vector2.getAngle());
+        if(rVal>180.0){
+            return rVal-360.0;
+        } else if (rVal<-180.0){
+            return rVal+360.0;
+        } else {
+            return rVal;
+        }
+    }
+
     public Vector2D getNormalized() {
         double magnitude = getLength();
         return new Vector2D(x / magnitude, y / magnitude);
@@ -211,6 +222,10 @@ public class Vector2D {
         double b = Math.sqrt(Math.pow(radius,2)-Math.pow(a,2));
         return endVector.getNormalized().getMultiplied(b).getAdded(intersectVector).getSubtracted(worldVector).getNormalized();
     }
+
+//    public static Vector2D VectorProgressDeg(Vector2D preVector, double progress, double degrees){
+//        return preVector.getRotatedBy(progress*degrees);
+//    }
 
     public void rotateBy(double angle) {
         double cos = Math.cos(angle);

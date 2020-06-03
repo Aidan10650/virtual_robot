@@ -1,10 +1,12 @@
 package Calculators;
 
 import Utilities.Vector2D;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import Hardware.CompleteController;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Interfaces {
 
@@ -21,7 +23,15 @@ public class Interfaces {
         }
 
         public double heading = 0;
+        public double debugData1 = 0;
+        public double debugData2 = 0;
+        public boolean debugDataBool;
         public DistanceSensor frontDist;
+        public DistanceSensor backDist;
+        public DistanceSensor rightDist;
+        public DistanceSensor leftDist;
+        public Servo backServo;
+        public ColorSensor colorSensor;
         public boolean firstLoop = true;
         public double timeRemainingUntilEndgame = 0;
         public double timeRemainingUntilMatch = 0;
@@ -65,4 +75,5 @@ public class Interfaces {
     public interface OtherCalc extends ProgressCalc{
         void CalcOther(MoveData d);
     }
+
 }

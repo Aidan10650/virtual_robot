@@ -1,7 +1,5 @@
 package Calculators;
 
-import Utilities.MathUtil;
-import Utilities.TimeUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class OtherCalcs {
@@ -50,7 +48,14 @@ public class OtherCalcs {
             }
         };
     }
-    public static Interfaces.OtherCalc DistanceStop(double startStopDist, double stopStopDist, double startProgress, double endProgress){
+
+    public enum Side {
+        FRONT,
+        BACK,
+        RIGHT,
+        LEFT
+    }
+    public static Interfaces.OtherCalc DistanceStop(Side side, double startStopDist, double stopStopDist, double startProgress, double endProgress){
 
         return new Interfaces.OtherCalc(){
             private double myProgress = 0;
@@ -61,11 +66,47 @@ public class OtherCalcs {
 
             @Override
             public void CalcOther(Interfaces.MoveData d){
-                if(startStopDist > d.frontDist.getDistance(DistanceUnit.CM)){
-                    myProgress = startProgress+(endProgress - startProgress)*((startStopDist-d.frontDist.getDistance(DistanceUnit.CM))
-                                /(startStopDist-stopStopDist));
-                } else if (stopStopDist > d.frontDist.getDistance(DistanceUnit.CM)){
-                    myProgress = 1.0;
+                switch(side) {
+                    case FRONT:
+                        if (startStopDist < d.frontDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = 0;
+                        } else if (startStopDist > d.frontDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = startProgress + (endProgress - startProgress) * ((startStopDist - d.frontDist.getDistance(DistanceUnit.CM))
+                                    / (startStopDist - stopStopDist));
+                        } else if (stopStopDist > d.frontDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = endProgress;
+                        }
+                        break;
+                    case BACK:
+                        if (startStopDist < d.backDist.getDistance(DistanceUnit.CM)){
+                            myProgress = 0;
+                        } else if (startStopDist > d.backDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = startProgress + (endProgress - startProgress) * ((startStopDist - d.backDist.getDistance(DistanceUnit.CM))
+                                    / (startStopDist - stopStopDist));
+                        } else if (stopStopDist > d.backDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = endProgress;
+                        }
+                        break;
+                    case RIGHT:
+                        if (startStopDist < d.rightDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = 0;
+                        } else if (startStopDist > d.rightDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = startProgress + (endProgress - startProgress) * ((startStopDist - d.rightDist.getDistance(DistanceUnit.CM))
+                                    / (startStopDist - stopStopDist));
+                        } else if (stopStopDist > d.rightDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = endProgress;
+                        }
+                        break;
+                    case LEFT:
+                        if (startStopDist < d.leftDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = 0;
+                        } else if (startStopDist > d.leftDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = startProgress + (endProgress - startProgress) * ((startStopDist - d.leftDist.getDistance(DistanceUnit.CM))
+                                    / (startStopDist - stopStopDist));
+                        } else if (stopStopDist > d.leftDist.getDistance(DistanceUnit.CM)) {
+                            myProgress = endProgress;
+                        }
+                        break;
                 }
             }
         };

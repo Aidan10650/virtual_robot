@@ -7,10 +7,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc16072.Util.RobotPosition;
 
-@TeleOp(name = "mechanum auto opmode", group = "ftc16072")
+@TeleOp(name = "mechanum auto opmode", group = "ftc")
 public class MecanumAutoOpMode extends OpMode {
     private Robot robot = new Robot();
-    int state = 0;
+    private int state = 0;
 
     // Code to run ONCE when the driver hits INIT
     @Override
@@ -32,7 +32,7 @@ public class MecanumAutoOpMode extends OpMode {
                 }
                 break;
             case 1:
-                if (robot.nav.rotateTo(90, AngleUnit.DEGREES)) {
+                if (robot.nav.rotateTo(0, AngleUnit.DEGREES)) {
                     state = 2;
                 }
                 break;

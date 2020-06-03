@@ -9,10 +9,12 @@ import Hardware.CompleteController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.ftc16072.MecanumDrive;
 import org.firstinspires.ftc.teamcode.ftc16072.Robot;
+import virtual_robot.controller.VirtualRobotController;
 
 public abstract class ComplexOp extends LinearOpMode{
 
@@ -70,6 +72,9 @@ public abstract class ComplexOp extends LinearOpMode{
 
             //could add specific telemetry data to show through an implementation of complexOp
 //          telemetry.addData("Progress found", didProgress);
+            telemetry.addData("curve Length",d.debugData1);
+            telemetry.addData("curve Progress",d.debugData2*1000/10);
+            telemetry.addData("colorSensor", d.colorSensor.red());
             telemetry.addData("frontDist",Math.round(d.frontDist.getDistance(DistanceUnit.CM)*10)/10.0);
             telemetry.addData("Progress", Math.round(d.progress*1000)/10.0);
             telemetry.addData("time until endgame", endGameTime);
@@ -120,6 +125,12 @@ public abstract class ComplexOp extends LinearOpMode{
         d.fleft.setDirection(DcMotor.Direction.REVERSE);
 
         d.frontDist = hwMap.get(DistanceSensor.class, "front_distance");
+        d.backDist = hwMap.get(DistanceSensor.class, "back_distance");
+        d.rightDist = hwMap.get(DistanceSensor.class, "right_distance");
+        d.leftDist = hwMap.get(DistanceSensor.class, "left_distance");
+
+        d.colorSensor = hwMap.get(VirtualRobotController.ColorSensorImpl.class,"color_sensor");
+        d.backServo = hwMap.get(Servo.class,"back_servo");
     }
 
     public abstract void body() throws InterruptedException;
