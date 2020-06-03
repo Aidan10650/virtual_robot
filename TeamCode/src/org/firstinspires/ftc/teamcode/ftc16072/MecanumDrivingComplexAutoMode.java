@@ -19,12 +19,15 @@ public class MecanumDrivingComplexAutoMode extends Op.ComplexOp {
                         new Vector2D(-150, 150),
                         new Vector2D(-300, 0),
                         new Vector2D(-150, -150),
-                        new Vector2D(0, 0)),
+                        new Vector2D(0, -150),
+                        new Vector2D(0, 0)
+                        /*,
+                        new Vector2D(0, 0)*/),
                 OrientationCalcs.spinToProgress(
                         new OrientationCalcs.spinProgress(0.15, 0.2, 90),
                         new OrientationCalcs.spinProgress(0.75, 0.85, 0))
                 /*OtherCalcs.DistanceStop(OtherCalcs.Side.LEFT,150,145,0.95,1)*/);
-/*
+
         ComplexMove(
                 SpeedCalcs.setProgressSpeed(
                         new SpeedCalcs.ProgressSpeed(1,0.2, SpeedCalcs.ProgressSpeed.timeOrProg.PROG),
@@ -42,6 +45,6 @@ public class MecanumDrivingComplexAutoMode extends Op.ComplexOp {
                         new OrientationCalcs.spinProgress(0.75, 0.85, -90)),
                 OtherCalcs.DistanceStop(OtherCalcs.Side.FRONT,15,10,0.95,1));
 
- */
+ 
     }
 }

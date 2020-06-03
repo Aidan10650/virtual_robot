@@ -78,7 +78,7 @@ public class Vector2D {
     }
 
     public static double angleDifferenceDeg(Vector2D vector1, Vector2D vector2){
-        double rVal = Math.toDegrees(vector1.getAngle() - vector2.getAngle());
+        double rVal = Math.toDegrees(vector1.getNormalized().getAngle() - vector2.getNormalized().getAngle());
         if(rVal>180.0){
             return rVal-360.0;
         } else if (rVal<-180.0){
@@ -219,8 +219,18 @@ public class Vector2D {
         double perpMag = Vector2D.project(endVector,worldVector);
         Vector2D intersectVector = endVector.getNormalized().getMultiplied(perpMag);
         double a = intersectVector.distance(worldVector);
-        double b = Math.sqrt(Math.pow(radius,2)-Math.pow(a,2));
-        return endVector.getNormalized().getMultiplied(b).getAdded(intersectVector).getSubtracted(worldVector).getNormalized();
+        double b = Math.sqrt(Math.pow(radius,2)-Math.pow(a,2) ); // Abs could be totally wrong here, but avoiding NaN
+        //double b = Math.sqrt(Math.abs( Math.pow(radius,2)-Math.pow(a,2) )); // Abs could be totally wrong here, but avoiding NaN
+        Vector2D normalizedEndVector = endVector.getNormalized();
+        Vector2D rvalUnnormalized = normalizedEndVector.getMultiplied(b).getAdded(intersectVector).getSubtracted(worldVector);
+        Vector2D rval = rvalUnnormalized.getNormalized();
+        System.out.print("normalizedEndVector: ");System.out.println(normalizedEndVector);
+        System.out.print("b: ");System.out.println(b);
+        System.out.print("intersectVector: ");System.out.println(intersectVector);
+        System.out.print("worldVector: ");System.out.println(worldVector);
+        System.out.print("rvalUnnormalized: ");System.out.println(rvalUnnormalized);
+        System.out.print("rval: ");System.out.println(rval);
+        return rval;
     }
 
 //    public static Vector2D VectorProgressDeg(Vector2D preVector, double progress, double degrees){
