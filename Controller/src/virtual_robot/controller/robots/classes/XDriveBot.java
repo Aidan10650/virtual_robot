@@ -43,16 +43,16 @@ public class XDriveBot extends VirtualBot {
     public XDriveBot() {
         super();
         motors = new DcMotorImpl[]{
-                (DcMotorImpl)hardwareMap.dcMotor.get("back_left_motor"),
-                (DcMotorImpl)hardwareMap.dcMotor.get("front_left_motor"),
-                (DcMotorImpl)hardwareMap.dcMotor.get("front_right_motor"),
-                (DcMotorImpl)hardwareMap.dcMotor.get("back_right_motor")
+                (DcMotorImpl)hardwareMap.dcMotor.get("bleft"),
+                (DcMotorImpl)hardwareMap.dcMotor.get("fleft"),
+                (DcMotorImpl)hardwareMap.dcMotor.get("fright"),
+                (DcMotorImpl)hardwareMap.dcMotor.get("bright")
         };
         distanceSensors = new VirtualRobotController.DistanceSensorImpl[]{
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "front_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "left_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "back_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "right_distance")
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "frontRange"),
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "leftRange"),
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "backRange"),
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "rightRange")
         };
         //gyro = (VirtualRobotController.GyroSensorImpl)hardwareMap.gyroSensor.get("gyro_sensor");
         imu = hardwareMap.get(BNO055IMUImpl.class, "imu");
@@ -78,9 +78,9 @@ public class XDriveBot extends VirtualBot {
     protected void createHardwareMap(){
         motorType = MotorType.Neverest40;
         hardwareMap = new HardwareMap();
-        String[] motorNames = new String[] {"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor"};
+        String[] motorNames = new String[] {"bleft", "fleft", "fright", "bright"};
         for (String name: motorNames) hardwareMap.put(name, new DcMotorImpl(motorType));
-        String[] distNames = new String[]{"front_distance", "left_distance", "back_distance", "right_distance"};
+        String[] distNames = new String[]{"frontRange", "leftRange", "backRange", "rightRange"};
         for (String name: distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
         //hardwareMap.put("gyro_sensor", controller.new GyroSensorImpl());
         hardwareMap.put("imu", new BNO055IMUImpl(this, 10));

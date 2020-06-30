@@ -1,5 +1,7 @@
 package virtual_robot.controller.robots.classes;
 
+import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.ServoImpl;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Rectangle;
@@ -8,6 +10,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.bosch.BNO055IMUImpl;
 import com.qualcomm.robotcore.hardware.DcMotorImpl;
 import com.qualcomm.robotcore.hardware.MotorType;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamNameImpl;
+import sun.nio.fs.MacOSXFileSystemProvider;
 import virtual_robot.controller.BotConfig;
 import virtual_robot.controller.VirtualBot;
 import virtual_robot.controller.VirtualRobotController;
@@ -27,9 +32,10 @@ public class MechanumBot extends VirtualBot {
     private DcMotorImpl[] motors = null;
     //private VirtualRobotController.GyroSensorImpl gyro = null;
     private BNO055IMUImpl imu = null;
+    private NavxMicroNavigationSensor navX = null;
     private VirtualRobotController.ColorSensorImpl colorSensor = null;
     private ServoImpl servo = null;
-    private VirtualRobotController.DistanceSensorImpl[] distanceSensors = null;
+    private ModernRoboticsI2cRangeSensor[] distanceSensors = null;
 
     // backServoArm is instantiated during loading via a fx:id property.
     @FXML Rectangle backServoArm;
@@ -45,19 +51,20 @@ public class MechanumBot extends VirtualBot {
     public MechanumBot(){
         super();
         motors = new DcMotorImpl[]{
-                (DcMotorImpl)hardwareMap.dcMotor.get("back_left_motor"),
-                (DcMotorImpl)hardwareMap.dcMotor.get("front_left_motor"),
-                (DcMotorImpl)hardwareMap.dcMotor.get("front_right_motor"),
-                (DcMotorImpl)hardwareMap.dcMotor.get("back_right_motor")
+                (DcMotorImpl)hardwareMap.dcMotor.get("bleft"),
+                (DcMotorImpl)hardwareMap.dcMotor.get("fleft"),
+                (DcMotorImpl)hardwareMap.dcMotor.get("fright"),
+                (DcMotorImpl)hardwareMap.dcMotor.get("bright")
         };
-        distanceSensors = new VirtualRobotController.DistanceSensorImpl[]{
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "front_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "left_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "back_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "right_distance")
+        distanceSensors = new ModernRoboticsI2cRangeSensor[]{
+                hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "frontRange"),
+                hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "leftRange"),
+                hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "backRange"),
+                hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rightRange")
         };
         //gyro = (VirtualRobotController.GyroSensorImpl)hardwareMap.gyroSensor.get("gyro_sensor");
         imu = hardwareMap.get(BNO055IMUImpl.class, "imu");
+        navX = hardwareMap.get(NavxMicroNavigationSensor.class, "navX");
         colorSensor = (VirtualRobotController.ColorSensorImpl)hardwareMap.colorSensor.get("color_sensor");
         servo = (ServoImpl)hardwareMap.servo.get("back_servo");
         wheelCircumference = Math.PI * botWidth / 4.5;
@@ -81,14 +88,16 @@ public class MechanumBot extends VirtualBot {
     protected void createHardwareMap(){
         motorType = MotorType.Neverest40;
         hardwareMap = new HardwareMap();
-        String[] motorNames = new String[] {"back_left_motor", "front_left_motor", "front_right_motor", "back_right_motor"};
+        String[] motorNames = new String[] {"bleft", "fleft", "fright", "bright"};
         for (String name: motorNames) hardwareMap.put(name, new DcMotorImpl(motorType));
-        String[] distNames = new String[]{"front_distance", "left_distance", "back_distance", "right_distance"};
-        for (String name: distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
+        String[] distNames = new String[]{"frontRange", "leftRange", "backRange", "rightRange"};
+        for (String name: distNames) hardwareMap.put(name, new ModernRoboticsI2cRangeSensor());
         //hardwareMap.put("gyro_sensor", controller.new GyroSensorImpl());
+        hardwareMap.put("navX", new NavxMicroNavigationSensor(this,10));
         hardwareMap.put("imu", new BNO055IMUImpl(this, 10));
         hardwareMap.put("color_sensor", controller.new ColorSensorImpl());
         hardwareMap.put("back_servo", new ServoImpl());
+        hardwareMap.put("stoned cam", new WebcamNameImpl());
     }
 
     public synchronized void updateStateAndSensors(double millis){
@@ -130,6 +139,7 @@ public class MechanumBot extends VirtualBot {
         else if (headingRadians < -Math.PI) headingRadians += 2.0 * Math.PI;
 
         imu.updateHeadingRadians(headingRadians);
+        navX.updateHeadingRadians(headingRadians);
 
         colorSensor.updateColor(x, y);
 

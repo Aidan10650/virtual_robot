@@ -119,10 +119,10 @@ public class ArmBot extends VirtualBot {
 
         //Instantiate the four DistanceSensors
         distanceSensors = new VirtualRobotController.DistanceSensorImpl[]{
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "front_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "left_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "back_distance"),
-                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "right_distance")
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "frontRange"),
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "leftRange"),
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "backRange"),
+                hardwareMap.get(VirtualRobotController.DistanceSensorImpl.class, "rightRange")
         };
 
         //Instantiate the hand servo. Note the cast to ServoImpl.
@@ -196,7 +196,7 @@ public class ArmBot extends VirtualBot {
         for (String name: motorNames) hardwareMap.put(name, new DcMotorImpl(motorType));
 
         //Add the distance sensors
-        String[] distNames = new String[]{"front_distance", "left_distance", "back_distance", "right_distance"};
+        String[] distNames = new String[]{"frontRange", "leftRange", "backRange", "rightRange"};
         for (String name: distNames) hardwareMap.put(name, controller.new DistanceSensorImpl());
 
         //Add the BNO055IMUImpl sensor

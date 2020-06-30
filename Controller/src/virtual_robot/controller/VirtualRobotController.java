@@ -33,11 +33,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotorImpl;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import virtual_robot.controller.robots.classes.MechanumBot;
-import virtual_robot.controller.robots.classes.TwoWheelBot;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,8 +64,8 @@ public class VirtualRobotController {
     //Virtual Hardware
     private HardwareMap hardwareMap = null;
     private VirtualBot bot = null;
-    GamePad gamePad1 = new GamePad();
-    GamePad gamePad2 = new GamePad();
+    Gamepad gamepad1 = new Gamepad();
+    Gamepad gamepad2 = new Gamepad();
     GamePadHelper gamePadHelper = null;
     ScheduledExecutorService gamePadExecutorService = Executors.newSingleThreadScheduledExecutor();
 
@@ -618,14 +616,14 @@ public class VirtualRobotController {
      */
     public class OpModeBase {
         protected final HardwareMap hardwareMap;
-        protected final GamePad gamepad1;
-        protected final GamePad gamepad2;
+        protected final Gamepad gamepad1;
+        protected final Gamepad gamepad2;
         protected final Telemetry telemetry;
 
         public OpModeBase() {
             hardwareMap = VirtualRobotController.this.hardwareMap;
-            gamepad1 = gamePad1;
-            this.gamepad2 = gamePad2;
+            gamepad1 = VirtualRobotController.this.gamepad1;
+            this.gamepad2 = VirtualRobotController.this.gamepad2;
             telemetry = new TelemetryImpl();
         }
     }
@@ -682,8 +680,8 @@ public class VirtualRobotController {
 
         public void run() {
             VirtualGamePadController.ControllerState state = virtualGamePadController.getState();
-            gamePad1.update(state);
-            gamePad2.resetValues();
+            gamepad1.update(state);
+            gamepad2.resetValues();
         }
 
         public void quit(){}
@@ -760,13 +758,13 @@ public class VirtualRobotController {
             }
 
 
-            if (gamePad1Index == 0) gamePad1.update(state0);
-            else if (gamePad1Index == 1) gamePad1.update(state1);
-            else gamePad1.resetValues();
+            if (gamePad1Index == 0) gamepad1.update(state0);
+            else if (gamePad1Index == 1) gamepad1.update(state1);
+            else gamepad1.resetValues();
 
-            if (gamePad2Index == 0) gamePad2.update(state0);
-            else if (gamePad2Index == 1) gamePad2.update(state1);
-            else gamePad2.resetValues();
+            if (gamePad2Index == 0) gamepad2.update(state0);
+            else if (gamePad2Index == 1) gamepad2.update(state1);
+            else gamepad2.resetValues();
         }
 
         public void quit(){
