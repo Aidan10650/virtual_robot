@@ -2,8 +2,8 @@ package virtual_robot.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 
@@ -13,10 +13,11 @@ public class VirtualGamePadController {
     @FXML StackPane joyStickRightPane;
     @FXML Circle joyStickLeftHandle;
     @FXML Circle joyStickRightHandle;
-    @FXML Button btnX;
-    @FXML Button btnY;
-    @FXML Button btnA;
-    @FXML Button btnB;
+    @FXML Label controllerLabel;
+    @FXML Button btnRT;
+    @FXML Button btnLT;
+    @FXML Button btnRB;
+    @FXML Button btnLB;
     @FXML Button btnU;
     @FXML Button btnD;
     @FXML Button btnR;
@@ -27,6 +28,8 @@ public class VirtualGamePadController {
     volatile float left_stick_y = 0;
     volatile float right_stick_x = 0;
     volatile float right_stick_y = 0;
+    volatile float rightTrigger = 0;
+    volatile float leftTrigger = 0;
     volatile boolean xPressed = false;
     volatile boolean yPressed = false;
     volatile boolean aPressed = false;
@@ -35,7 +38,9 @@ public class VirtualGamePadController {
     volatile boolean dPressed = false;
     volatile boolean lPressed = false;
     volatile boolean rPressed = false;
-    boolean alternate = true;
+    volatile boolean rbPressed = false;
+    volatile boolean lbPressed = false;
+    boolean alternate = false;
 
     VirtualRobotController virtualRobotController = null;
 
@@ -67,11 +72,23 @@ public class VirtualGamePadController {
         if (!virtualRobotController.getOpModeInitialized()) return;
         Button btn = (Button)arg.getSource();
         boolean result;
+        float trigResult;
 
 
-        if (arg.getEventType() == MouseEvent.MOUSE_EXITED || arg.getEventType() == MouseEvent.MOUSE_RELEASED) result = false;
-        else if (arg.getEventType() == MouseEvent.MOUSE_PRESSED) result = true;
+        if (arg.getEventType() == MouseEvent.MOUSE_EXITED || arg.getEventType() == MouseEvent.MOUSE_RELEASED) {
+            result = false;
+            trigResult = (float) 0.0;
+        }
+        else if (arg.getEventType() == MouseEvent.MOUSE_PRESSED) {
+            result = true;
+            trigResult = (float) 0.99;
+        }
         else return;
+
+        if (btn == btnRT) rightTrigger = trigResult;
+        else if (btn == btnLT) leftTrigger = trigResult;
+        else if (btn == btnRB) rbPressed = result;
+        else if (btn == btnLB) lbPressed = result;
 
         if(alternate) {
             if (btn == btnL) lPressed = result;
@@ -114,6 +131,10 @@ public class VirtualGamePadController {
         uPressed = false;
         rPressed = false;
         lPressed = false;
+        rbPressed = false;
+        lbPressed = false;
+        rightTrigger = 0;
+        leftTrigger = 0;
         joyStickLeftHandle.setTranslateX(50);
         joyStickLeftHandle.setTranslateY(50);
         joyStickRightHandle.setTranslateX(50);
@@ -134,20 +155,34 @@ public class VirtualGamePadController {
         public final boolean d;
         public final boolean l;
         public final boolean r;
+        public final boolean rb;
+        public final boolean lb;
+        public final float rt;
+        public final float lt;
 
-        public ControllerState(){
+
+        public ControllerState() {
             leftStickX = VirtualGamePadController.this.left_stick_x;
             leftStickY = VirtualGamePadController.this.left_stick_y;
+
             rightStickX = VirtualGamePadController.this.right_stick_x;
             rightStickY = VirtualGamePadController.this.right_stick_y;
+
             a = VirtualGamePadController.this.aPressed;
             b = VirtualGamePadController.this.bPressed;
             x = VirtualGamePadController.this.xPressed;
             y = VirtualGamePadController.this.yPressed;
+
             u = VirtualGamePadController.this.uPressed;
             d = VirtualGamePadController.this.dPressed;
             l = VirtualGamePadController.this.lPressed;
             r = VirtualGamePadController.this.rPressed;
+
+            rb = VirtualGamePadController.this.rbPressed;
+            lb = VirtualGamePadController.this.lbPressed;
+
+            rt = VirtualGamePadController.this.rightTrigger;
+            lt = VirtualGamePadController.this.leftTrigger;
         }
     }
 

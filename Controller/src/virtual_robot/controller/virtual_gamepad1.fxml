@@ -12,7 +12,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Label?>
 <HBox alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="virtual_robot.controller.VirtualGamePadController">
+
     <GridPane fx:id="DPAD" alignment="CENTER">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
@@ -25,47 +27,48 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
         <children>
-            <Button fx:id="btnLT" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="LT" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="0">
+            <Label fx:id="controllerLabel" text="${'D\nR\nI\nV\nE\nR\n'}" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.rowSpan="3" wrapText="true"/>
+            <Button fx:id="btnLT" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="LT" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnL" alignment="CENTER" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="L" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Button fx:id="btnL" alignment="CENTER" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="X" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnRT" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="RT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
+            <Button fx:id="btnRT" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="RT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnU" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="U" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+            <Button fx:id="btnU" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="Y" GridPane.columnIndex="2" GridPane.halignment="CENTER">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnLB" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="LB" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+            <Button fx:id="btnLB" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="LB" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnD" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="D" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <Button fx:id="btnD" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="A" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnR" alignment="CENTER" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="R" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Button fx:id="btnR" alignment="CENTER" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="B" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnRB" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="RB" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+            <Button fx:id="btnRB" alignment="TOP_LEFT" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="RB" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Button>
-            <Button fx:id="btnSwitch" alignment="CENTER" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="S" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Button fx:id="btnSwitch" alignment="CENTER" mnemonicParsing="false" onMouseExited="#handleGamePadButtonMouseEvent" onMousePressed="#handleGamePadButtonMouseEvent" onMouseReleased="#handleGamePadButtonMouseEvent" text="S" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                 <font>
                     <Font size="10.0" />
                 </font>

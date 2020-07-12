@@ -9,12 +9,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.util.Callback;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.reflections.Reflections;
@@ -58,7 +62,8 @@ public class VirtualRobotController {
     @FXML private TextArea txtTelemetry;
     @FXML private CheckBox checkBoxGamePad1;
     @FXML private CheckBox checkBoxGamePad2;
-    @FXML private BorderPane borderPane;
+    @FXML private GridPane bottomControllerGrid;
+
     @FXML private CheckBox cbxShowPath;
 
     //Virtual Hardware
@@ -69,7 +74,8 @@ public class VirtualRobotController {
     GamePadHelper gamePadHelper = null;
     ScheduledExecutorService gamePadExecutorService = Executors.newSingleThreadScheduledExecutor();
 
-    VirtualGamePadController virtualGamePadController = null;
+    VirtualGamePadController virtualGamePadController1 = null;
+    VirtualGamePadController virtualGamePadController2 = null;
 
     //Background Image and Field
     private Image backgroundImage = Config.BACKGROUND;
@@ -144,12 +150,21 @@ public class VirtualRobotController {
         if (Config.USE_VIRTUAL_GAMEPAD){
             checkBoxGamePad1.setVisible(false);
             checkBoxGamePad2.setVisible(false);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("virtual_gamepad.fxml"));
+            FXMLLoader loader1 = new FXMLLoader(getClass().getResource("virtual_gamepad1.fxml"));
+            FXMLLoader loader2 = new FXMLLoader(getClass().getResource("virtual_gamepad2.fxml"));
             try{
-                HBox hbox = (HBox)loader.load();
-                virtualGamePadController = loader.getController();
-                virtualGamePadController.setVirtualRobotController(this);
-                borderPane.setBottom(hbox);
+                HBox hbox1 = (HBox)loader1.load();
+                HBox hbox2 = (HBox)loader2.load();
+                virtualGamePadController1 = loader1.getController();
+                virtualGamePadController1.controllerLabel.setFont(Font.font("Monospace"));
+                virtualGamePadController2 = loader2.getController();
+                virtualGamePadController2.controllerLabel.setFont(Font.font("Monospace"));
+                virtualGamePadController1.setVirtualRobotController(this);
+                virtualGamePadController2.setVirtualRobotController(this);
+
+                hbox1.setPadding(new Insets(0.0,50.0,0.0,0.0));
+                bottomControllerGrid.add(hbox1,0,0);
+                bottomControllerGrid.add(hbox2,1,0);
             } catch (IOException e){
                 System.out.println("Virtual GamePad UI Failed to Load");
             }
@@ -381,7 +396,11 @@ public class VirtualRobotController {
             }
             if (opModeThread.isAlive()) System.out.println("OpMode Thread Failed to Terminate.");
             bot.powerDownAndReset();
-            if (Config.USE_VIRTUAL_GAMEPAD) virtualGamePadController.resetGamePad();
+            if (Config.USE_VIRTUAL_GAMEPAD) {
+                virtualGamePadController1.resetGamePad();
+                virtualGamePadController2.resetGamePad();
+            }
+
             initializeTelemetryTextArea();
             cbxConfig.setDisable(false);
         }
@@ -449,7 +468,10 @@ public class VirtualRobotController {
                 //resetGamePad();
                 initializeTelemetryTextArea();
                 cbxConfig.setDisable(false);
-                if (Config.USE_VIRTUAL_GAMEPAD) virtualGamePadController.resetGamePad();
+                if (Config.USE_VIRTUAL_GAMEPAD) {
+                    virtualGamePadController1.resetGamePad();
+                    virtualGamePadController2.resetGamePad();
+                }
             }
         });
 
@@ -679,9 +701,10 @@ public class VirtualRobotController {
     public class VirtualGamePadHelper implements GamePadHelper {
 
         public void run() {
-            VirtualGamePadController.ControllerState state = virtualGamePadController.getState();
-            gamepad1.update(state);
-            gamepad2.resetValues();
+            VirtualGamePadController.ControllerState state1 = virtualGamePadController1.getState();
+            VirtualGamePadController.ControllerState state2 = virtualGamePadController2.getState();
+            gamepad1.update(state1);
+            gamepad2.update(state2);
         }
 
         public void quit(){}

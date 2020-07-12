@@ -108,12 +108,12 @@ public class Gamepad {
         back = false;
         guide = false;
         start = false;
-        left_bumper = false;
-        right_bumper = false;
+        left_bumper = state.lb;
+        right_bumper = state.rb;
         left_stick_button = false;
         right_stick_button = false;
-        left_trigger = 0;
-        right_trigger = 0;
+        left_trigger = state.lt;
+        right_trigger = state.rt;
     }
 
 }
