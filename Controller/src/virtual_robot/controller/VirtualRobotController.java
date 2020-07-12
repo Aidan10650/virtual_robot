@@ -134,7 +134,7 @@ public class VirtualRobotController {
         Rectangle pathRect = new Rectangle(fieldWidth, fieldWidth);
         pathRect.setFill(Color.color(1,0,0,0));
         pathLine = new Polyline();
-        pathLine.setStroke(Color.LAWNGREEN);
+        pathLine.setStroke(Color.PURPLE);
         pathLine.setStrokeWidth(2);
         pathLine.setVisible(false);
         fieldPane.getChildren().addAll(new Group(pathRect, pathLine));

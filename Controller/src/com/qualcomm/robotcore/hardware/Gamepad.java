@@ -101,10 +101,10 @@ public class Gamepad {
         left_stick_y = setWithDeadzone(state.leftStickY);
         right_stick_x = setWithDeadzone(state.rightStickX);
         right_stick_y = setWithDeadzone(state.rightStickY);
-        dpad_up = false;
-        dpad_down = false;
-        dpad_left = false;
-        dpad_right = false;
+        dpad_up = state.u;
+        dpad_down = state.d;
+        dpad_left = state.l;
+        dpad_right = state.r;
         back = false;
         guide = false;
         start = false;

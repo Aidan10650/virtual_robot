@@ -3,6 +3,7 @@ package virtual_robot.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 
@@ -16,6 +17,11 @@ public class VirtualGamePadController {
     @FXML Button btnY;
     @FXML Button btnA;
     @FXML Button btnB;
+    @FXML Button btnU;
+    @FXML Button btnD;
+    @FXML Button btnR;
+    @FXML Button btnL;
+    @FXML Button btnSwitch;
 
     volatile float left_stick_x = 0;
     volatile float left_stick_y = 0;
@@ -25,6 +31,11 @@ public class VirtualGamePadController {
     volatile boolean yPressed = false;
     volatile boolean aPressed = false;
     volatile boolean bPressed = false;
+    volatile boolean uPressed = false;
+    volatile boolean dPressed = false;
+    volatile boolean lPressed = false;
+    volatile boolean rPressed = false;
+    boolean alternate = true;
 
     VirtualRobotController virtualRobotController = null;
 
@@ -57,14 +68,37 @@ public class VirtualGamePadController {
         Button btn = (Button)arg.getSource();
         boolean result;
 
+
         if (arg.getEventType() == MouseEvent.MOUSE_EXITED || arg.getEventType() == MouseEvent.MOUSE_RELEASED) result = false;
         else if (arg.getEventType() == MouseEvent.MOUSE_PRESSED) result = true;
         else return;
 
-        if (btn == btnX) xPressed = result;
-        else if (btn == btnY) yPressed = result;
-        else if (btn == btnA) aPressed = result;
-        else if (btn == btnB) bPressed = result;
+        if(alternate) {
+            if (btn == btnL) lPressed = result;
+            else if (btn == btnU) uPressed = result;
+            else if (btn == btnD) dPressed = result;
+            else if (btn == btnR) rPressed = result;
+        } else {
+            if (btn == btnL) xPressed = result;
+            else if (btn == btnU) yPressed = result;
+            else if (btn == btnD) aPressed = result;
+            else if (btn == btnR) bPressed = result;
+        }
+        if (btn == btnSwitch && result) {
+            if(alternate) {
+                btnD.textProperty().setValue("A");
+                btnU.textProperty().setValue("Y");
+                btnL.textProperty().setValue("X");
+                btnR.textProperty().setValue("B");
+                alternate = false;
+            } else {
+                btnD.textProperty().setValue("D");
+                btnU.textProperty().setValue("U");
+                btnL.textProperty().setValue("L");
+                btnR.textProperty().setValue("R");
+                alternate = true;
+            }
+        }
     }
 
     void resetGamePad(){
@@ -76,6 +110,10 @@ public class VirtualGamePadController {
         bPressed = false;
         xPressed = false;
         yPressed = false;
+        dPressed = false;
+        uPressed = false;
+        rPressed = false;
+        lPressed = false;
         joyStickLeftHandle.setTranslateX(50);
         joyStickLeftHandle.setTranslateY(50);
         joyStickRightHandle.setTranslateX(50);
@@ -92,6 +130,10 @@ public class VirtualGamePadController {
         public final boolean b;
         public final boolean x;
         public final boolean y;
+        public final boolean u;
+        public final boolean d;
+        public final boolean l;
+        public final boolean r;
 
         public ControllerState(){
             leftStickX = VirtualGamePadController.this.left_stick_x;
@@ -102,6 +144,10 @@ public class VirtualGamePadController {
             b = VirtualGamePadController.this.bPressed;
             x = VirtualGamePadController.this.xPressed;
             y = VirtualGamePadController.this.yPressed;
+            u = VirtualGamePadController.this.uPressed;
+            d = VirtualGamePadController.this.dPressed;
+            l = VirtualGamePadController.this.lPressed;
+            r = VirtualGamePadController.this.rPressed;
         }
     }
 

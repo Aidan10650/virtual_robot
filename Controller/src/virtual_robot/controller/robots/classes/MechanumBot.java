@@ -34,7 +34,7 @@ public class MechanumBot extends VirtualBot {
     private BNO055IMUImpl imu = null;
     private NavxMicroNavigationSensor navX = null;
     private VirtualRobotController.ColorSensorImpl colorSensor = null;
-    private ServoImpl servo = null;
+    private ServoImpl gripper, swinger, hooker, booker;
     private ModernRoboticsI2cRangeSensor[] distanceSensors = null;
 
     // backServoArm is instantiated during loading via a fx:id property.
@@ -66,7 +66,12 @@ public class MechanumBot extends VirtualBot {
         imu = hardwareMap.get(BNO055IMUImpl.class, "imu");
         navX = hardwareMap.get(NavxMicroNavigationSensor.class, "navX");
         colorSensor = (VirtualRobotController.ColorSensorImpl)hardwareMap.colorSensor.get("color_sensor");
-        servo = (ServoImpl)hardwareMap.servo.get("back_servo");
+
+        gripper = (ServoImpl)hardwareMap.servo.get("firm grasp");
+        swinger = (ServoImpl)hardwareMap.servo.get("ragtime");
+        hooker = (ServoImpl)hardwareMap.servo.get("hooker");
+        booker = (ServoImpl)hardwareMap.servo.get("booker");
+
         wheelCircumference = Math.PI * botWidth / 4.5;
         interWheelWidth = botWidth * 8.0 / 9.0;
         interWheelLength = botWidth * 7.0 / 9.0;
@@ -96,7 +101,12 @@ public class MechanumBot extends VirtualBot {
         hardwareMap.put("navX", new NavxMicroNavigationSensor(this,10));
         hardwareMap.put("imu", new BNO055IMUImpl(this, 10));
         hardwareMap.put("color_sensor", controller.new ColorSensorImpl());
-        hardwareMap.put("back_servo", new ServoImpl());
+
+        hardwareMap.put("firm grasp", new ServoImpl());
+        hardwareMap.put("ragtime", new ServoImpl());
+        hardwareMap.put("hooker", new ServoImpl());
+        hardwareMap.put("booker", new ServoImpl());
+
         hardwareMap.put("stoned cam", new WebcamNameImpl());
     }
 
@@ -155,7 +165,7 @@ public class MechanumBot extends VirtualBot {
 
     public synchronized void updateDisplay(){
         super.updateDisplay();
-        ((Rotate)backServoArm.getTransforms().get(0)).setAngle(-180.0 * servo.getInternalPosition());
+        ((Rotate)backServoArm.getTransforms().get(0)).setAngle(-180.0 * hooker.getInternalPosition());
     }
 
     public void powerDownAndReset(){
