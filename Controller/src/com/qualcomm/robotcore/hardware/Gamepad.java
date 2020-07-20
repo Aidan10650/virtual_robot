@@ -10,6 +10,18 @@ import virtual_robot.controller.VirtualGamePadController;
  */
 public class Gamepad {
 
+    public static final int ID_UNASSOCIATED = 1;//this is normally -1 but it is 1 for the simulator
+
+    private byte user = ID_UNASSOCIATED;
+
+    public GamepadUser getUser() {
+        return GamepadUser.from(user);
+    }
+    //
+    public void setUser(GamepadUser user) {
+        this.user = user.id;
+    }
+
     public volatile boolean x = false;
     public volatile boolean y = false;
     public volatile boolean a = false;
